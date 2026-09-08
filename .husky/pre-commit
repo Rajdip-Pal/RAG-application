@@ -1,0 +1,8 @@
+pnpm format
+pnpm lint
+pnpm exec tsc --noEmit
+git diff --cached --name-only | while IFS= read -r f; do
+  if [ -n "$f" ] && [ -e "$f" ]; then
+    git add -- "$f"
+  fi
+done
