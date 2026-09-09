@@ -10,7 +10,9 @@ import { OllamaProvider } from '../src/providers/llm/OllamaProvider.js';
 void test('selects the configured provider', () => {
     const config = createLLMConfig({
         LLM_PROVIDER: 'ollama',
-        OLLAMA_MODEL: 'test-model',
+        LLM_TEMPERATURE: 1,
+        OLLAMA_MODEL: 'qwen3:8b',
+        OLLAMA_BASE_URL: 'http://localhost:11434',
     });
 
     assert.equal(createLLMProvider(config).name, 'ollama');
