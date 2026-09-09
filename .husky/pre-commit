@@ -1,3 +1,4 @@
+pnpm test
 pnpm format
 pnpm lint
 pnpm exec tsc --noEmit
