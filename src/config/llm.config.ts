@@ -3,7 +3,7 @@ import type { Environment } from './env.js';
 import { parseEnvironment } from './env.js';
 import { InvalidLLMConfigurationError } from '../errors/LLMErrors.js';
 
-function required(value: string | undefined, variable: string): string {
+function required<T>(value: T | undefined, variable: string): T {
     if (!value) {
         throw new InvalidLLMConfigurationError(`${variable} is required for the selected LLM provider.`);
     }
@@ -12,14 +12,14 @@ function required(value: string | undefined, variable: string): string {
 }
 
 export function createLLMConfig(environment: Environment = parseEnvironment()): LLMConfig {
-    const temperature = environment.LLM_TEMPERATURE ?? 0;
+    const temperature: number = required(environment.LLM_TEMPERATURE, 'LLM_TEMPERATURE');
 
     switch (environment.LLM_PROVIDER) {
         case 'ollama':
             return {
                 provider: 'ollama',
                 model: required(environment.OLLAMA_MODEL, 'OLLAMA_MODEL'),
-                baseUrl: environment.OLLAMA_BASE_URL ?? 'http://localhost:11434',
+                baseUrl: required(environment.OLLAMA_BASE_URL, 'OLLAMA_BASE_URL'),
                 temperature,
             };
         case 'openai':
