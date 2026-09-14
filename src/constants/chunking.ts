@@ -1,0 +1,2 @@
+export const DEFAULT_CHUNK_MAX_SIZE = 2_000;
+export const DEFAULT_CHUNK_OVERLAP_SIZE = 200;
