@@ -7,6 +7,7 @@
         "dev": "tsx src/index.ts",
         "ingest": "tsx src/ingest.ts",
         "search": "tsx src/search.ts",
+        "answer": "tsx src/answer.ts",
         "build": "tsc",
         "test": "tsx --test test/**/*.test.ts",
         "start": "node dist/index.js",

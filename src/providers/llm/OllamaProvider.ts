@@ -7,6 +7,7 @@ export class OllamaProvider extends BaseLLMProvider {
     public constructor(config: OllamaConfig, model?: BaseChatModel) {
         super(
             'ollama',
+            config.model,
             model ??
                 new ChatOllama({
                     model: config.model,

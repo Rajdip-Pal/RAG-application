@@ -7,6 +7,7 @@ export class OpenAIProvider extends BaseLLMProvider {
     public constructor(config: OpenAIConfig, model?: BaseChatModel) {
         super(
             'openai',
+            config.model,
             model ??
                 new ChatOpenAI({
                     apiKey: config.apiKey,

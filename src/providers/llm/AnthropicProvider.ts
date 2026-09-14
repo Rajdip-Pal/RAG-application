@@ -7,6 +7,7 @@ export class AnthropicProvider extends BaseLLMProvider {
     public constructor(config: AnthropicConfig, model?: BaseChatModel) {
         super(
             'anthropic',
+            config.model,
             model ??
                 new ChatAnthropic({
                     apiKey: config.apiKey,

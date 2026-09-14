@@ -7,6 +7,7 @@ export class GeminiProvider extends BaseLLMProvider {
     public constructor(config: GeminiConfig, model?: BaseChatModel) {
         super(
             'gemini',
+            config.model,
             model ??
                 new ChatGoogleGenerativeAI({
                     apiKey: config.apiKey,
