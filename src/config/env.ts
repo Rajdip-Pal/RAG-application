@@ -24,6 +24,7 @@ const environmentSchema = z.object({
     ),
     OLLAMA_MODEL: optionalEnvironmentString,
     OLLAMA_EMBEDDING_MODEL: optionalEnvironmentString,
+    OLLAMA_EMBEDDING_MODEL_BASE_URL: optionalEnvironmentUrl,
     OLLAMA_BASE_URL: optionalEnvironmentUrl,
     DATABASE_URL: optionalEnvironmentUrl,
     HOST: optionalEnvironmentString,

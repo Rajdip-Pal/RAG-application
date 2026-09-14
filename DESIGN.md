@@ -67,7 +67,7 @@ Each chunk carries document ID, source, filename, heading path, chunk index, and
 
 ## 5. Embeddings
 
-`EmbeddingProvider` is the application boundary. Production composition uses `OllamaEmbeddingProvider` with BGE-M3 (`bge-m3`) and exactly 1,024 dimensions. The provider calls Ollama’s `/api/embed` endpoint and validates response count, numeric values, and dimensions. `ChunkEmbeddingService` batches chunks in groups of 32 by default and preserves order.
+`EmbeddingProvider` is the application boundary. Production composition uses `OllamaEmbeddingProvider` with BGE-M3 (`bge-m3`) and exactly 1,024 dimensions. Its base URL is configured independently through `OLLAMA_EMBEDDING_MODEL_BASE_URL`; the provider calls that Ollama instance’s `/api/embed` endpoint and validates response count, numeric values, and dimensions. `ChunkEmbeddingService` batches chunks in groups of 32 by default and preserves order.
 
 Queries use the same model/provider as document chunks, which keeps vectors comparable. BGE-M3 was selected for capable local semantic embeddings; the trade-off is greater local memory and latency than a smaller embedding model. The provider boundary allows replacement later, but only Ollama embeddings are currently composed.
 

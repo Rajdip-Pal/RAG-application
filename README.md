@@ -62,9 +62,10 @@ cp .env.example .env
 | --------------------------------------------------- | -------------- | -------------------------------------------- | ----------------------------------------- |
 | `LLM_PROVIDER`                                      | Yes            | `ollama`, `openai`, `anthropic`, or `gemini` | `ollama`                                  |
 | `LLM_TEMPERATURE`                                   | Yes            | LLM temperature from 0 to 2                  | `1`                                       |
-| `OLLAMA_BASE_URL`                                   | For Ollama     | Ollama URL; also used for embeddings         | `http://localhost:11434`                  |
+| `OLLAMA_BASE_URL`                                   | For Ollama LLM | Ollama URL for the chat provider             | `http://localhost:11434`                  |
 | `OLLAMA_MODEL`                                      | For Ollama LLM | Chat model                                   | `qwen3:8b`                                |
 | `OLLAMA_EMBEDDING_MODEL`                            | No             | Must be `bge-m3` currently                   | `bge-m3`                                  |
+| `OLLAMA_EMBEDDING_MODEL_BASE_URL`                   | No             | Ollama URL for the embedding provider        | `http://localhost:11434`                  |
 | `OPENAI_API_KEY`, `OPENAI_MODEL`                    | For OpenAI     | Hosted provider credentials/model            | `...`, `gpt-5.6-luna`                     |
 | `ANTHROPIC_API_KEY`, `ANTHROPIC_MODEL`              | For Anthropic  | Hosted provider credentials/model            | `...`, `claude-haiku-4-5-20251001`        |
 | `GOOGLE_API_KEY`, `GEMINI_MODEL`                    | For Gemini     | Hosted provider credentials/model            | `...`, `gemini-3.6-flash`                 |
