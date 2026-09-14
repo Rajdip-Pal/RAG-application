@@ -12,14 +12,14 @@ export function registerDocumentsRoute(app: FastifyInstance, ingestionService: P
         try {
             upload = await request.file();
         } catch {
-            throw new ApiValidationError('A valid multipart Markdown file upload is required.');
+            throw new ApiValidationError('A valid multipart Markdown or TXT file upload is required.');
         }
-        if (!upload) throw new ApiValidationError('A Markdown file upload is required.');
+        if (!upload) throw new ApiValidationError('A Markdown or TXT file upload is required.');
 
         const fileName = basename(upload.filename);
         const extension = extname(fileName).toLowerCase();
-        if (extension !== '.md' && extension !== '.markdown') {
-            throw new ApiValidationError('Only .md and .markdown files are supported.');
+        if (extension !== '.md' && extension !== '.markdown' && extension !== '.txt') {
+            throw new ApiValidationError('Only .md, .markdown, and .txt files are supported.');
         }
 
         const temporaryDirectory = await mkdtemp(join(tmpdir(), 'rag-upload-'));

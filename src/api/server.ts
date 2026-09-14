@@ -16,7 +16,7 @@ import { createDatabaseConfig } from '../config/database.config.js';
 import { createEmbeddingConfig } from '../config/embedding.config.js';
 import { createLLMConfig } from '../config/llm.config.js';
 import { parseEnvironment } from '../config/env.js';
-import { MarkdownLoaderProvider } from '../providers/document-loader/MarkdownLoaderProvider.js';
+import { DirectoryLoaderProvider } from '../providers/document-loader/DirectoryLoaderProvider.js';
 
 const environment = parseEnvironment();
 const embeddingProvider = createEmbeddingProvider(createEmbeddingConfig(environment));
@@ -30,7 +30,7 @@ const ragService = new RagService(
     new SourceCitationParser(),
 );
 const ingestionService = new DocumentIngestionService(
-    new MarkdownLoaderProvider(),
+    new DirectoryLoaderProvider(),
     createChunkerProvider().get('markdown'),
     new ChunkEmbeddingService(embeddingProvider),
     vectorStore,

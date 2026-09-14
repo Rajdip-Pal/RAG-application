@@ -6,6 +6,8 @@ import { test } from 'node:test';
 import { Document } from '@langchain/core/documents';
 import { DirectoryLoaderProvider } from '../src/providers/document-loader/DirectoryLoaderProvider.js';
 import { MarkdownLoaderProvider } from '../src/providers/document-loader/MarkdownLoaderProvider.js';
+import { TextLoaderProvider } from '../src/providers/document-loader/TextLoaderProvider.js';
+import { toDocument } from '../src/core/types/document-adapter.js';
 
 async function withTemporaryDirectory<T>(callback: (directory: string) => Promise<T>): Promise<T> {
     const directory = await mkdtemp(join(tmpdir(), 'document-loader-'));
@@ -38,17 +40,57 @@ void test('rejects when the Markdown file does not exist', async () => {
     });
 });
 
+void test('loads a TXT file as UTF-8 content with source metadata', async () => {
+    await withTemporaryDirectory(async (directory) => {
+        const filePath = join(directory, 'leave-policy.txt');
+        const content = 'Employee leave policy.\n\nEmployees receive 20 days of annual leave.';
+        await writeFile(filePath, content, 'utf8');
+
+        const documents = await new TextLoaderProvider().load(filePath);
+
+        assert.equal(documents.length, 1);
+        assert.ok(documents[0] instanceof Document);
+        assert.equal(documents[0]?.pageContent, content);
+        assert.equal(documents[0]?.metadata.source, filePath);
+
+        const normalized = toDocument(documents[0]!);
+        assert.equal(normalized.metadata.source, filePath);
+        assert.equal(normalized.metadata.fileName, 'leave-policy.txt');
+        assert.equal(normalized.metadata.mimeType, 'text/plain');
+        assert.match(normalized.id, /^[a-f0-9]{64}$/);
+    });
+});
+
+void test('loads an empty TXT file as an empty document', async () => {
+    await withTemporaryDirectory(async (directory) => {
+        const filePath = join(directory, 'empty.txt');
+        await writeFile(filePath, '', 'utf8');
+
+        const documents = await new TextLoaderProvider().load(filePath);
+
+        assert.equal(documents.length, 1);
+        assert.equal(documents[0]?.pageContent, '');
+        assert.equal(documents[0]?.metadata.source, filePath);
+    });
+});
+
+void test('does not allow TextLoaderProvider to load unsupported extensions', async () => {
+    await assert.rejects(new TextLoaderProvider().load('/tmp/policy.pdf'), /only supports \.txt files/);
+});
+
 void test('loads Markdown files from a directory and ignores other extensions', async () => {
     await withTemporaryDirectory(async (directory) => {
         await writeFile(join(directory, 'leave-policy.md'), '# Leave Policy', 'utf8');
+        await writeFile(join(directory, 'remote-work.markdown'), '# Remote Work Markdown', 'utf8');
         await writeFile(join(directory, 'remote-work.md'), '# Remote Work', 'utf8');
-        await writeFile(join(directory, 'ignored.txt'), 'ignore this', 'utf8');
+        await writeFile(join(directory, 'leave-policy.txt'), 'Employees receive 20 days.', 'utf8');
+        await writeFile(join(directory, 'ignored.pdf'), 'ignore this', 'utf8');
 
         const documents = await new DirectoryLoaderProvider().load(directory);
         const contents = documents.map((document) => document.pageContent);
 
-        assert.equal(documents.length, 2);
-        assert.deepEqual(contents, ['# Leave Policy', '# Remote Work']);
+        assert.equal(documents.length, 4);
+        assert.deepEqual(contents, ['# Leave Policy', 'Employees receive 20 days.', '# Remote Work Markdown', '# Remote Work']);
         assert.equal(
             documents.some((document) => document.pageContent.includes('ignore this')),
             false,

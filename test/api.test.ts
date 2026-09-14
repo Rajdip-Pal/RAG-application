@@ -88,6 +88,23 @@ void test('POST /documents accepts a Markdown upload and delegates ingestion', a
     await app.close();
 });
 
+void test('POST /documents accepts a TXT upload', async () => {
+    const ingestionService = new FakeIngestionService();
+    const app = createApp({ ragService: new FakeRagService(), ingestionService });
+    const response = await app.inject({
+        method: 'POST',
+        url: '/documents',
+        headers: { 'content-type': 'multipart/form-data; boundary=api-test' },
+        payload:
+            '--api-test\r\nContent-Disposition: form-data; name="file"; filename="leave.txt"\r\nContent-Type: text/plain\r\n\r\nEmployees receive 20 days.\r\n--api-test--\r\n',
+    });
+
+    assert.equal(response.statusCode, 201);
+    assert.deepEqual(response.json(), { ingested: true, fileName: 'leave.txt', chunks: 0 });
+    assert.equal(ingestionService.fileName, 'leave.txt');
+    await app.close();
+});
+
 void test('POST /documents rejects missing and unsupported uploads', async () => {
     const app = createApp({ ragService: new FakeRagService(), ingestionService: new FakeIngestionService() });
     const missing = await app.inject({ method: 'POST', url: '/documents' });
@@ -98,7 +115,7 @@ void test('POST /documents rejects missing and unsupported uploads', async () =>
         url: '/documents',
         headers: { 'content-type': 'multipart/form-data; boundary=api-test' },
         payload:
-            '--api-test\r\nContent-Disposition: form-data; name="file"; filename="notes.txt"\r\nContent-Type: text/plain\r\n\r\ntext\r\n--api-test--\r\n',
+            '--api-test\r\nContent-Disposition: form-data; name="file"; filename="notes.pdf"\r\nContent-Type: application/pdf\r\n\r\ntext\r\n--api-test--\r\n',
     });
     assert.equal(unsupported.statusCode, 400);
     await app.close();

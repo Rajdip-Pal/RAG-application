@@ -1,5 +1,5 @@
 import type { Document as LangChainDocument } from '@langchain/core/documents';
-import { basename } from 'node:path';
+import { basename, extname } from 'node:path';
 import { createHash } from 'node:crypto';
 
 import type { Document, DocumentMetadata } from './Document.js';
@@ -10,7 +10,7 @@ export function toDocument(source: LangChainDocument): Document {
         ...source.metadata,
         source: sourcePath,
         fileName: basename(sourcePath),
-        mimeType: 'text/markdown',
+        mimeType: typeof source.metadata.mimeType === 'string' ? source.metadata.mimeType : mimeTypeFor(sourcePath),
     };
 
     return {
@@ -18,4 +18,8 @@ export function toDocument(source: LangChainDocument): Document {
         content: source.pageContent,
         metadata,
     };
+}
+
+function mimeTypeFor(source: string): string {
+    return extname(source).toLowerCase() === '.txt' ? 'text/plain' : 'text/markdown';
 }
