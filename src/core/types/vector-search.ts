@@ -1,11 +1,8 @@
-import type { DocumentChunk } from '../../chunking/core/document-chunk.js';
+import type { RetrievedChunk } from './retrieval.js';
 
 export interface VectorSearchOptions {
     readonly limit: number;
 }
 
-/** Cosine similarity score: higher values indicate a more similar chunk. */
-export interface VectorSearchResult {
-    readonly chunk: DocumentChunk;
-    readonly score: number;
-}
+/** Compatibility alias for vector-store callers; retrieval exposes the same domain result. */
+export type VectorSearchResult = RetrievedChunk;

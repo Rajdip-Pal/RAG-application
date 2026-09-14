@@ -17,7 +17,7 @@ const vectorStore = createVectorStore(createDatabaseConfig(environment));
 try {
     await vectorStore.initialize();
     const retrieval = new VectorRetrievalService(embeddingProvider, vectorStore);
-    const results = await retrieval.search(query, { limit: 5 });
+    const results = await retrieval.retrieve(query);
     console.log(JSON.stringify(results, null, 2));
 } finally {
     await vectorStore.close();

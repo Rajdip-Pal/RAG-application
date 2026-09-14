@@ -98,7 +98,7 @@ export class PgVectorStore implements VectorStore {
                 SELECT id, document_id, content, metadata,
                        1 - (embedding <=> $1::vector) AS score
                 FROM chunks
-                ORDER BY embedding <=> $1::vector
+                ORDER BY embedding <=> $1::vector, id
                 LIMIT $2
                 `,
                 [toPgVector(embedding), options.limit],
