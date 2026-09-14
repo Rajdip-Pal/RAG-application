@@ -27,6 +27,7 @@
     "type": "module",
     "dependencies": {
         "@langchain/anthropic": "^1.5.9",
+        "@langchain/classic": "^1.0.46",
         "@langchain/core": "^1.2.9",
         "@langchain/google-genai": "^2.3.0",
         "@langchain/langgraph": "^1.4.14",

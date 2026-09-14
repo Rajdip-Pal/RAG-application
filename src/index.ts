@@ -1,10 +1,17 @@
 import 'dotenv/config';
 import { createLLMConfig } from './config/llm.config.js';
+import { createDirectoryLoaderProvider } from './composition/createDirectoryLoaderProvider.js';
 import { createLLMProvider } from './composition/createLLMProvider.js';
 
 import { performance } from 'node:perf_hooks';
-import { LLMProvider } from './core/interfaces/LLMProvider.js';
-import { LLMConfig } from './core/types/LLMConfig.js';
+import type { LLMProvider } from './core/interfaces/LLMProvider.js';
+import type { LLMConfig } from './core/types/LLMConfig.js';
+
+const documentLoaderProvider = createDirectoryLoaderProvider();
+const documents = await documentLoaderProvider.load(process.cwd() + '/documents');
+
+console.log(`Loaded ${documents.length} Markdown document(s).`);
+documents.forEach((doc) => console.log(`Metadata:\n\n ${JSON.stringify(doc.metadata)}\n\nContent:\n\n ${doc.pageContent}`));
 
 const start: number = performance.now();
 
