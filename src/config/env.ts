@@ -11,6 +11,11 @@ const optionalEnvironmentUrl = z.preprocess(
     z.string().url().optional(),
 );
 
+const optionalEnvironmentPort = z.preprocess(
+    (value) => (typeof value === 'string' && value.trim() === '' ? undefined : value),
+    z.coerce.number().int().min(1).max(65_535).optional(),
+);
+
 const environmentSchema = z.object({
     LLM_PROVIDER: z.string().trim().min(1),
     LLM_TEMPERATURE: z.preprocess(
@@ -21,6 +26,8 @@ const environmentSchema = z.object({
     OLLAMA_EMBEDDING_MODEL: optionalEnvironmentString,
     OLLAMA_BASE_URL: optionalEnvironmentUrl,
     DATABASE_URL: optionalEnvironmentUrl,
+    HOST: optionalEnvironmentString,
+    PORT: optionalEnvironmentPort,
     OPENAI_API_KEY: optionalEnvironmentString,
     OPENAI_MODEL: optionalEnvironmentString,
     ANTHROPIC_API_KEY: optionalEnvironmentString,
