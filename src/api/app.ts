@@ -18,6 +18,12 @@ export interface ApiDependencies {
 
 export function createApp(dependencies: ApiDependencies): FastifyInstance {
     const app = Fastify({ logger: false });
+    app.addHook('onRequest', async (request, reply) => {
+        reply.header('access-control-allow-origin', '*');
+        reply.header('access-control-allow-methods', 'GET,POST,OPTIONS');
+        reply.header('access-control-allow-headers', 'content-type');
+        if (request.method === 'OPTIONS') return reply.code(204).send();
+    });
     app.register(multipart, { limits: { files: 1, fileSize: 10 * 1024 * 1024 } });
 
     registerHealthRoute(app);

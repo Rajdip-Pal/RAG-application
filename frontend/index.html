@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en" data-api-base-url="http://localhost:3000">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="description" content="Ask questions grounded in your HR policy documents." />
+        <title>HR Policy Assistant</title>
+        <link rel="stylesheet" href="./src/styles.css" />
+    </head>
+    <body>
+        <main class="page-shell">
+            <header class="hero">
+                <div class="brand-mark" aria-hidden="true">HR</div>
+                <div>
+                    <p class="eyebrow">Policy intelligence</p>
+                    <h1>HR Policy Assistant</h1>
+                    <p class="hero-copy">Ask questions and get answers grounded in uploaded HR policies.</p>
+                </div>
+                <div id="health-status" class="health-status" role="status">Checking API…</div>
+            </header>
+
+            <section class="workspace" aria-label="HR policy assistant">
+                <section class="panel upload-panel" aria-labelledby="policies-title">
+                    <div class="section-heading">
+                        <div>
+                            <p class="eyebrow">Knowledge base</p>
+                            <h2 id="policies-title">Policies</h2>
+                        </div>
+                        <span class="step-badge">01</span>
+                    </div>
+
+                    <p class="muted">Upload a policy document to ground your answers in company guidance.</p>
+                    <label class="file-picker" for="policy-file">
+                        <span class="file-picker-icon" aria-hidden="true">↑</span>
+                        <span>
+                            <strong>Choose policy file</strong>
+                            <small>.md, .markdown, or .txt</small>
+                        </span>
+                    </label>
+                    <input id="policy-file" type="file" accept=".md,.markdown,.txt,text/markdown,text/plain" />
+                    <p class="supported-copy">Supported: .md, .markdown, .txt</p>
+                    <div id="upload-status" class="status-message" role="status" aria-live="polite"></div>
+                </section>
+
+                <section class="panel question-panel" aria-labelledby="question-title">
+                    <div class="section-heading">
+                        <div>
+                            <p class="eyebrow">Policy search</p>
+                            <h2 id="question-title">Ask about your HR policies</h2>
+                        </div>
+                        <span class="step-badge">02</span>
+                    </div>
+
+                    <form id="question-form">
+                        <label class="sr-only" for="question-input">Ask about your HR policies</label>
+                        <textarea
+                            id="question-input"
+                            rows="4"
+                            maxlength="1000"
+                            placeholder="How many casual leave days can I carry forward?"
+                        ></textarea>
+                        <div class="question-actions">
+                            <span class="hint">Press Ctrl/⌘ + Enter to ask</span>
+                            <button id="ask-button" class="primary-button" type="submit">Ask <span aria-hidden="true">→</span></button>
+                        </div>
+                    </form>
+                    <div id="query-status" class="status-message" role="status" aria-live="polite"></div>
+                </section>
+            </section>
+
+            <section id="answer-panel" class="panel answer-panel is-hidden" aria-labelledby="answer-title">
+                <div class="answer-heading">
+                    <div>
+                        <p class="eyebrow">Grounded response</p>
+                        <h2 id="answer-title">Answer</h2>
+                    </div>
+                    <span id="answer-kind" class="answer-kind">From your policies</span>
+                </div>
+                <p id="answer-text" class="answer-text"></p>
+                <div id="sources-section" class="sources-section is-hidden">
+                    <div class="sources-heading">
+                        <h3>Sources</h3>
+                        <span id="source-count"></span>
+                    </div>
+                    <div id="sources-list" class="sources-list"></div>
+                </div>
+            </section>
+
+            <footer>
+                Answers are generated from the policies you upload. When the documents do not contain enough information, the assistant will
+                say so.
+            </footer>
+        </main>
+        <script type="module" src="./dist/main.js"></script>
+    </body>
+</html>
